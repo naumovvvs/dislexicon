@@ -1,13 +1,11 @@
-<div class="container">
-    <h1 class="text-center">Прашања</h1>
+<div class="container mt-3">
+    <div style="background-color: #034078; color:white; padding: 10px; border-radius: 10px;" class="row mb-4">
+        <h1 class="text-center">Прашања</h1>
+    </div>
 
-    <div id="content1">
+    <div id="content1" style="background-color: #EFFFC8; padding: 20px; font-size: 16pt; border-radius: 10px;" class="row">
         <div class="row justify-content-center mt-5 mb-2">
-            <div class="col-6" id="question_text">
-                Еден ден лисицата беше гладна и насекаде бараше храна. Таа дојде до едно лозје и здогледа грозје како виси од лозата.
-                Се обиде да го достигне но не успеа бидејќи беше многу високо. Најпосле таа рече:
-                „Грозјето е горчливо, не ми се допаѓа“, и си замина.
-            </div>
+            <div class="col col-lg-6" id="question_text"></div>
         </div>
         <div class="row justify-content-end mt-5 mb-2">
             <div class="col-4">
@@ -19,34 +17,34 @@
 
     <div id="content2" hidden>
         <div class="row justify-content-center mt-5 mb-2">
-            <div class="col-4">
-                <button type="button" class="btn btn-lg btn-warning w-100" id="questionTitle">Што бараше лисицата?</button>
+            <div class="col col-lg-4">
+                <button type="button" class="btn btn-lg btn-warning w-100" id="questionTitle"></button>
             </div>
         </div>
 
         <div class="row justify-content-center mt-5 mb-2">
-            <div class="col-2">
-                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans1">Храна</button>
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans1"></button>
             </div>
-            <div class="col-1">
+            <div class="col-2 col-lg-1">
                 <img src="img/audio.png" class="rounded mx-auto" width="35px" height="35px">
                 <audio id="ans1_audio" src="audio/hint.m4a"></audio>
             </div>
         </div>
         <div class="row justify-content-center mt-5 mb-2">
-            <div class="col-2">
-                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans2">Вода</button>
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans2"></button>
             </div>
-            <div class="col-1">
+            <div class="col-2 col-lg-1">
                 <img src="img/audio.png" class="rounded mx-auto" width="35px" height="35px">
                 <audio id="ans2_audio" src="audio/hint.m4a"></audio>
             </div>
         </div>
         <div class="row justify-content-center mt-5 mb-2">
-            <div class="col-2">
-                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans3">Засолниште</button>
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans3"></button>
             </div>
-            <div class="col-1">
+            <div class="col-2 col-lg-1">
                 <img src="img/audio.png" class="rounded mx-auto" width="35px" height="35px">
                 <audio id="ans3_audio" src="audio/hint.m4a"></audio>
             </div>
@@ -54,12 +52,53 @@
     </div>
 
     <div class="row justify-content-center mt-5 mb-2">
-        <div class="col-3">
-            <button type="button" class="btn btn-md btn-primary w-100" id="next">Следно</button>
+        <div class="col-6 col-lg-3">
+            <button type="button" class="btn btn-lg btn-primary w-100" id="next">Следно</button>
         </div>
     </div>
 
+    <audio id="audio_correct" src="audio/correctAnswer.m4a"></audio>
+    <audio id="audio_wrong" src="audio/wrongAnswer.m4a"></audio>
+
+    <!-- Correct Modal -->
+    <div class="modal fade" id="correctModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Точен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wrong Modal -->
+    <div class="modal fade" id="wrongModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Погрешен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Обидете се повторно...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    img:hover {
+        cursor: pointer;
+    }
+</style>
 
 <script>
     let apiURL = "http://localhost:8080/api/questions";
@@ -78,10 +117,12 @@
 
     function checkAnswer(response) {
         if(questions[currentQuestion-1].correctAnswer.responseText.toLowerCase()===response.toLowerCase()) {
-            alert("TOCEN ODGOVOR!");
+            document.getElementById("audio_correct").play();
+            $('#correctModal').modal('toggle');
             setText();
         } else {
-            alert("POGRESEN ODGOVOR!");
+            document.getElementById("audio_wrong").play();
+            $('#wrongModal').modal('toggle');
         }
     }
 

@@ -1,33 +1,125 @@
-<div class="container">
-    <h1 class="text-center">Броеви</h1>
+<div class="container mt-3">
+    <div style="background-color: #034078; color:white; padding: 10px; border-radius: 10px;" class="row mb-4">
+        <h1 class="text-center">Броеви</h1>
+    </div>
 
     <div class="row justify-content-center mt-5 mb-2">
-        <div class="col-4">
-            <button type="button" class="btn btn-lg btn-warning w-100">5 + 2 = ?</button>
+        <div class="col col-lg-4">
+            <button type="button" class="btn btn-lg btn-warning w-100" id="mathQuestion"></button>
         </div>
     </div>
 
     <div class="row justify-content-center mt-5 mb-2">
-        <div class="col-2">
-            <button type="button" class="btn btn-lg btn-info btn-default w-100">3</button>
+        <div class="col-6 col-lg-2">
+            <button type="button" class="btn btn-lg btn-info btn-default w-100 answers"></button>
         </div>
-        <div class="col-2">
-            <button type="button" class="btn btn-lg btn-info btn-default w-100">7</button>
+        <div class="col-6 col-lg-2">
+            <button type="button" class="btn btn-lg btn-info btn-default w-100 answers"></button>
         </div>
     </div>
     <div class="row justify-content-center mt-5 mb-2">
-        <div class="col-2">
-            <button type="button" class="btn btn-lg btn-info btn-default w-100">5</button>
+        <div class="col-6 col-lg-2">
+            <button type="button" class="btn btn-lg btn-info btn-default w-100 answers"></button>
         </div>
-        <div class="col-2">
-            <button type="button" class="btn btn-lg btn-info btn-default w-100">4</button>
+        <div class="col-6 col-lg-2">
+            <button type="button" class="btn btn-lg btn-info btn-default w-100 answers"></button>
         </div>
     </div>
 
     <div class="row justify-content-end mt-5">
-        <div class="col-2">
-            <button class="col-2 btn btn-lg btn-primary w-100">Следно (skip)</button>
+        <div class="col-5 col-lg-2">
+            <button class="col-2 btn btn-lg btn-primary w-100" id="skipBtn">Прескокни</button>
+        </div>
+    </div>
+
+    <audio id="audio_correct" src="audio/correctAnswer.m4a"></audio>
+    <audio id="audio_wrong" src="audio/wrongAnswer.m4a"></audio>
+
+    <!-- Correct Modal -->
+    <div class="modal fade" id="correctModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Точен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wrong Modal -->
+    <div class="modal fade" id="wrongModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Погрешен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Обидете се повторно или преминете на следно прашање со клик на копчето „Прескокни“...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
+
+<script>
+    let apiURL = "http://localhost:8080/api/math";
+    let maths;
+    let currentQuestion = 0;
+
+    $.ajax({
+        url: apiURL,
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(result){
+            maths = result;
+            nextQuestion();
+        }
+    });
+
+    function checkAnswer(response) {
+        if(maths[currentQuestion].correctAnswer.responseText.toLowerCase()===response.toLowerCase()) {
+            document.getElementById("audio_correct").play();
+            $('#correctModal').modal('toggle');
+            currentQuestion++;
+            nextQuestion();
+        } else {
+            document.getElementById("audio_wrong").play();
+            $('#wrongModal').modal('toggle');
+        }
+    }
+
+    function nextQuestion() {
+        if(currentQuestion>=maths.length) {
+            currentQuestion = 0;
+        }
+
+        document.getElementById("mathQuestion").innerText = maths[currentQuestion].mathQuestionTitle;
+        let arrResponses = document.getElementsByClassName("answers");
+
+        for(let i=0; i<arrResponses.length; i++) {
+            let questionResponses = maths[currentQuestion].responses;
+
+            arrResponses[i].replaceWith(arrResponses[i].cloneNode(true));
+
+            arrResponses[i].addEventListener("click", function () {
+                checkAnswer(questionResponses[i].responseText);
+            });
+
+            arrResponses[i].innerHTML = questionResponses[i].responseText;
+        }
+    }
+
+    document.getElementById("skipBtn").addEventListener("click", function () {
+        currentQuestion++;
+        nextQuestion();
+    })
+</script>

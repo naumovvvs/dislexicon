@@ -22,4 +22,10 @@ public class Item {
     private String title;
     private String imagePath;
     private String audioPath;
+
+    public Item(String title, String imagePath, String audioPath) {
+        this.title = title;
+        this.imagePath = imagePath;
+        this.audioPath = audioPath;
+    }
 }

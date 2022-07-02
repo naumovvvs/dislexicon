@@ -21,5 +21,14 @@ public class Question {
     private String audioPath;
     @ManyToMany
     private List<Response> responses;
-    private String correctAnswer;
+    @OneToOne
+    private Response correctAnswer;
+
+    public Question(String title, String text, String audioPath, List<Response> responses, Response correctResponse) {
+        this.questionTitle = title;
+        this.textQuestion = text;
+        this.audioPath = audioPath;
+        this.responses = responses;
+        this.correctAnswer = correctResponse;
+    }
 }

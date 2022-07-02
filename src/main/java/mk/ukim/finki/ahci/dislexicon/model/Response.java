@@ -19,4 +19,14 @@ public class Response {
     private Long id;
 
     private String responseText;
+    private String audioPath;
+
+    public Response(String responseText) {
+        this.responseText = responseText;
+    }
+
+    public Response(String responseText, String audioPath) {
+        this.responseText = responseText;
+        this.audioPath = audioPath;
+    }
 }

@@ -1,0 +1,97 @@
+<div class="container">
+    <h1 class="text-center">Слико-збор</h1>
+    <div class="row justify-content-center mt-5 mb-2">
+        <div class="col-12">
+            <img src="img/ikona.png" id="picture" class="rounded mx-auto d-block" width="300px" height="300px">
+        </div>
+    </div>
+    <div class="row justify-content-center mt-1 mb-2">
+        <div class="col-12">
+            <img id="pictureAudio" src="img/audio.png" class="rounded mx-auto d-block" width="50px" height="50px">
+            <audio id="audio_picture" src="audio/hint.m4a"></audio>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5 mb-2">
+        <div class="col-4">
+            <div class="input-group">
+                <input id="inputAnswer" type="text" class="form-control" placeholder="Внеси го името на предметот...">
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3 mb-2">
+        <button class="col-2 btn btn-lg btn-primary" id="submit">Готово</button>
+    </div>
+    <div class="row justify-content-center mt-3 mb-2">
+        <div class="col-1">
+            <img id="exclamation" src="img/exclamation.png" class="rounded mx-auto" width="75px" height="75px">
+            <audio id="audio_exclamation" src="audio/hint.m4a"></audio>
+        </div>
+        <div class="col-1">
+            <img id="questionMark" src="img/question.png" class="rounded mx-auto" width="75px" height="75px">
+            <audio id="audio_questionMark" src="audio/questionMark.m4a"></audio>
+        </div>
+    </div>
+
+    <audio id="audio_correct" src="audio/correctAnswer.m4a"></audio>
+    <audio id="audio_wrong" src="audio/wrongAnswer.m4a"></audio>
+</div>
+
+<script>
+    const apiURL = "http://localhost:8080/api/pictureWord";
+    let arrImg;
+    let index = 0;
+    let clickCounter = 0;
+
+    $.ajax({
+        url: apiURL,
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(result){
+            arrImg = result;
+            nextPicture();
+        }
+    });
+
+    function checkAnswer() {
+        let input = document.getElementById("inputAnswer").value.toLowerCase();
+        let answer = arrImg[index].title.toLowerCase();
+
+        if(input===answer){
+            index++;
+            clickCounter = 0;
+            document.getElementById("audio_correct").play();
+            document.getElementById("inputAnswer").value = "";
+            alert("ТОЧЕН ОДГОВОР!");
+            nextPicture();
+        }else {
+            document.getElementById("audio_wrong").play();
+            alert("ПОГРЕШЕН ОДГОВОР!");
+        }
+    }
+
+    function nextPicture() {
+        if(index>=arrImg.length) {
+            index=0;
+        }
+
+        document.getElementById("picture").src = arrImg[index].imagePath;
+        document.getElementById("audio_picture").src = arrImg[index].audioPath;
+    }
+
+    document.getElementById("submit").addEventListener("click", checkAnswer);
+    document.getElementById("pictureAudio").addEventListener("click", function(){
+        document.getElementById('audio_picture').play();
+    });
+    document.getElementById("questionMark").addEventListener("click", function(){
+        document.getElementById('audio_questionMark').play();
+    });
+    document.getElementById("exclamation").addEventListener("click", function(){
+        if(clickCounter<1) {
+            document.getElementById('audio_exclamation').play();
+        }else {
+            let answer = arrImg[index].title;
+            alert("Точниот одговор е " + answer);
+        }
+        clickCounter++;
+    });
+</script>

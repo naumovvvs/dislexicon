@@ -19,5 +19,12 @@ public class MathQuestion {
     private String mathQuestionTitle;
     @ManyToMany
     private List<Response> responses;
-    private Integer correctAnswer;
+    @OneToOne
+    private Response correctAnswer;
+
+    public MathQuestion(String mathQuestionTitle, List<Response> responses, Response correctAnswer) {
+        this.mathQuestionTitle = mathQuestionTitle;
+        this.responses = responses;
+        this.correctAnswer = correctAnswer;
+    }
 }

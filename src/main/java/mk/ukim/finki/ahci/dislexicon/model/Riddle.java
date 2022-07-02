@@ -20,4 +20,9 @@ public class Riddle {
 
     private String riddleTitle;
     private String riddleAnswer;
+
+    public Riddle (String title, String answer) {
+        this.riddleTitle = title;
+        this.riddleAnswer = answer;
+    }
 }

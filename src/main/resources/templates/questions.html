@@ -27,7 +27,7 @@
                 <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans1"></button>
             </div>
             <div class="col-2 col-lg-1">
-                <img src="img/audio.png" class="rounded mx-auto" width="35px" height="35px">
+                <img src="img/audio.png" class="rounded mx-auto audioResponses" width="35px" height="35px">
                 <audio id="ans1_audio" src="audio/hint.m4a"></audio>
             </div>
         </div>
@@ -36,7 +36,7 @@
                 <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans2"></button>
             </div>
             <div class="col-2 col-lg-1">
-                <img src="img/audio.png" class="rounded mx-auto" width="35px" height="35px">
+                <img src="img/audio.png" class="rounded mx-auto audioResponses" width="35px" height="35px">
                 <audio id="ans2_audio" src="audio/hint.m4a"></audio>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans3"></button>
             </div>
             <div class="col-2 col-lg-1">
-                <img src="img/audio.png" class="rounded mx-auto" width="35px" height="35px">
+                <img src="img/audio.png" class="rounded mx-auto audioResponses" width="35px" height="35px">
                 <audio id="ans3_audio" src="audio/hint.m4a"></audio>
             </div>
         </div>
@@ -132,6 +132,7 @@
         }
 
         document.getElementById("question_text").innerText = questions[currentQuestion].textQuestion;
+        document.getElementById("audio_text").src = questions[currentQuestion].audioPath;
         document.getElementById('content1').hidden = false;
         document.getElementById('content2').hidden = true;
         document.getElementById('next').hidden = false;
@@ -141,15 +142,21 @@
         document.getElementById("questionTitle").innerHTML = questions[currentQuestion].questionTitle;
         document.getElementById("audio_text").src = questions[currentQuestion].audioPath;
         let arrResponses = document.getElementsByClassName("response");
+        let audioResponses = document.getElementsByClassName("audioResponses");
 
         for(let i=0; i<arrResponses.length; i++) {
             let questionResponses = questions[currentQuestion].responses;
 
             arrResponses[i].replaceWith(arrResponses[i].cloneNode(true));
+            audioResponses[i].replaceWith(audioResponses[i].cloneNode(true));
 
             arrResponses[i].addEventListener("click", function () {
                 checkAnswer(questionResponses[i].responseText);
             });
+
+            audioResponses[i].addEventListener("click", function () {
+                document.getElementById("ans"+(i+1)+"_audio").play();
+            })
 
             arrResponses[i].innerHTML = questionResponses[i].responseText;
             document.getElementById("ans"+(i+1)+"_audio").src= questionResponses[i].audioPath;

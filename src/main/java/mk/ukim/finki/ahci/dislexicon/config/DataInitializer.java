@@ -58,9 +58,9 @@ public class DataInitializer {
         this.itemRepository.save(item8);
 
 
-        Response response1 = new Response("храна", "audio/q1_hrana.m4a");
-        Response response2 = new Response("вода", "audio/q2_voda.m4a");
-        Response response3 = new Response("засолниште", "audio/q3_zasolniste.m4a");
+        Response response1 = new Response("храна", "audio/questions/hrana.m4a");
+        Response response2 = new Response("вода", "audio/questions/voda.m4a");
+        Response response3 = new Response("засолниште", "audio/questions/zasolniste.m4a");
         this.responseRepository.save(response1);
         this.responseRepository.save(response2);
         this.responseRepository.save(response3);
@@ -68,21 +68,21 @@ public class DataInitializer {
         Question question1 = new Question("Што бараше лисицата?", "Еден ден лисицата беше гладна и насекаде " +
                 "бараше храна. Таа дојде до едно лозје и здогледа грозје како виси од лозата.\n" +
                 "Се обиде да го достигне но не успеа бидејќи беше многу високо. Најпосле таа рече:\n" +
-                "„Грозјето е горчливо, не ми се допаѓа“, и си замина.", "audio/question1.m4a",
+                "„Грозјето е горчливо, не ми се допаѓа“, и си замина.", "audio/questions/q1text.m4a",
                 responseList, response1);
         this.questionRepository.save(question1);
 
-        Response response4 = new Response("Марија", "audio/marija.m4a");
-        Response response5 = new Response("Ана", "audio/ana.m4a");
-        Response response6 = new Response("Јана", "audio/jana.m4a");
+        Response response4 = new Response("Марија", "audio/questions/marija.m4a");
+        Response response5 = new Response("Ана", "audio/questions/ana.m4a");
+        Response response6 = new Response("Јана", "audio/questions/jana.m4a");
         this.responseRepository.save(response4);
         this.responseRepository.save(response5);
         this.responseRepository.save(response6);
         responseList = new ArrayList<>(Arrays.asList(response4, response5, response6));
         Question question2 = new Question("Како се вика другарката на авторот?", "Децата од моето маало се многу " +
-                "дружељубиви. Вчера отидовме на излет правевме скара. Јас бев главен готвач, но ми помагаше и мојата " +
-                "другарка Јана. Цела ден останавме таму а кога почна да се стемнува си заминавме дома.",
-                "audio/question2.m4a", responseList, response6);
+                "дружељубиви. Вчера отидовме на излет и правевме скара. Јас бев главен готвач, но ми помагаше и мојата " +
+                "другарка Јана. Цел ден останавме таму а кога почна да се стемнува си заминавме дома.",
+                "audio/questions/q2text.m4a", responseList, response6);
         this.questionRepository.save(question2);
 
         Response response7 = new Response("1");

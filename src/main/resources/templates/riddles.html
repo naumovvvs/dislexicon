@@ -1,0 +1,118 @@
+<div class="container mt-3">
+    <div style="background-color: #034078; color:white; padding: 10px; border-radius: 10px;" class="row mb-4">
+        <h1 class="text-center">Загатки</h1>
+    </div>
+
+    <div class="row justify-content-center mt-5 mb-2">
+        <div class="col col-lg-4">
+            <button type="button" class="btn btn-lg btn-warning w-100" id="riddleText"></button>
+        </div>
+    </div>
+
+    <form>
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="col-11 col-lg-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Внеси го одговорот..." id="answer">
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-3 mb-5">
+            <button type="submit" class="col-8 col-lg-2 btn btn-lg btn-primary" id="submit">Готово</button>
+        </div>
+    </form>
+
+    <div class="row justify-content-end mt-5">
+        <div class="col-5 col-lg-2">
+            <button class="btn btn-lg btn-primary w-100" id="skip">Прескокни</button>
+        </div>
+    </div>
+
+    <audio id="audio_correct" src="audio/correctAnswer.m4a"></audio>
+    <audio id="audio_wrong" src="audio/wrongAnswer.m4a"></audio>
+
+    <!-- Correct Modal -->
+    <div class="modal fade" id="correctModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Точен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wrong Modal -->
+    <div class="modal fade" id="wrongModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Погрешен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Обидете се повторно или преминете на следната загатка со клик на копчето „Прескокни“...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let apiURL = "http://localhost:8080/api/riddles";
+    let riddles;
+    let currentRiddle = 0;
+
+    $.ajax({
+        url: apiURL,
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(result){
+            riddles = result;
+            setRiddle();
+        }
+    });
+
+    function setRiddle() {
+        if(currentRiddle>=riddles.length)
+            currentRiddle = 0;
+
+        document.getElementById("riddleText").innerText = riddles[currentRiddle].riddleTitle;
+        document.getElementById("answer").value = "";
+    }
+
+    function checkAnswer() {
+        let answer = document.getElementById("answer").value;
+
+        if(answer.toLowerCase()===riddles[currentRiddle].riddleAnswer.toLowerCase()) {
+            document.getElementById("audio_correct").play();
+            $('#correctModal').modal('toggle');
+
+            currentRiddle++;
+            setRiddle();
+        }else {
+            document.getElementById("audio_wrong").play();
+            document.getElementById("answer").value = "";
+
+            $('#wrongModal').modal('toggle');
+        }
+    }
+
+    document.getElementById("submit").addEventListener("click", function (e) {
+        e.preventDefault();
+        checkAnswer();
+    })
+
+    document.getElementById("skip").addEventListener("click", function () {
+        currentRiddle++;
+        setRiddle();
+    })
+</script>

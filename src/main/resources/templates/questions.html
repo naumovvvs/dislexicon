@@ -1,0 +1,178 @@
+<div class="container mt-3">
+    <div style="background-color: #034078; color:white; padding: 10px; border-radius: 10px;" class="row mb-4">
+        <h1 class="text-center">Прашања</h1>
+    </div>
+
+    <div id="content1" style="background-color: #EFFFC8; padding: 20px; font-size: 16pt; border-radius: 10px;" class="row">
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="col col-lg-6" id="question_text"></div>
+        </div>
+        <div class="row justify-content-end mt-5 mb-2">
+            <div class="col-4">
+                <img id="audioIcon" src="img/audio.png" class="d-block" width="50px" height="50px">
+                <audio id="audio_text" src=""></audio>
+            </div>
+        </div>
+    </div>
+
+    <div id="content2" hidden>
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="col col-lg-4">
+                <button type="button" class="btn btn-lg btn-warning w-100" id="questionTitle"></button>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans1"></button>
+            </div>
+            <div class="col-2 col-lg-1">
+                <img src="img/audio.png" class="rounded mx-auto audioResponses" width="35px" height="35px">
+                <audio id="ans1_audio" src="audio/hint.m4a"></audio>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans2"></button>
+            </div>
+            <div class="col-2 col-lg-1">
+                <img src="img/audio.png" class="rounded mx-auto audioResponses" width="35px" height="35px">
+                <audio id="ans2_audio" src="audio/hint.m4a"></audio>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="col col-lg-2">
+                <button type="button" class="btn btn-lg btn-info btn-default w-100 response" id="ans3"></button>
+            </div>
+            <div class="col-2 col-lg-1">
+                <img src="img/audio.png" class="rounded mx-auto audioResponses" width="35px" height="35px">
+                <audio id="ans3_audio" src="audio/hint.m4a"></audio>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-5 mb-2">
+        <div class="col-6 col-lg-3">
+            <button type="button" class="btn btn-lg btn-primary w-100" id="next">Следно</button>
+        </div>
+    </div>
+
+    <audio id="audio_correct" src="audio/correctAnswer.m4a"></audio>
+    <audio id="audio_wrong" src="audio/wrongAnswer.m4a"></audio>
+
+    <!-- Correct Modal -->
+    <div class="modal fade" id="correctModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Точен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wrong Modal -->
+    <div class="modal fade" id="wrongModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Погрешен одговор!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Обидете се повторно...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    img:hover {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    let apiURL = "http://localhost:8080/api/questions";
+    let questions;
+    let currentQuestion = 0;
+
+    $.ajax({
+        url: apiURL,
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(result){
+            questions = result;
+            setText();
+        }
+    });
+
+    function checkAnswer(response) {
+        if(questions[currentQuestion-1].correctAnswer.responseText.toLowerCase()===response.toLowerCase()) {
+            document.getElementById("audio_correct").play();
+            $('#correctModal').modal('toggle');
+            setText();
+        } else {
+            document.getElementById("audio_wrong").play();
+            $('#wrongModal').modal('toggle');
+        }
+    }
+
+    function setText() {
+        if(currentQuestion>=questions.length) {
+            currentQuestion = 0;
+        }
+
+        document.getElementById("question_text").innerText = questions[currentQuestion].textQuestion;
+        document.getElementById("audio_text").src = questions[currentQuestion].audioPath;
+        document.getElementById('content1').hidden = false;
+        document.getElementById('content2').hidden = true;
+        document.getElementById('next').hidden = false;
+    }
+
+    function nextQuestion() {
+        document.getElementById("questionTitle").innerHTML = questions[currentQuestion].questionTitle;
+        document.getElementById("audio_text").src = questions[currentQuestion].audioPath;
+        let arrResponses = document.getElementsByClassName("response");
+        let audioResponses = document.getElementsByClassName("audioResponses");
+
+        for(let i=0; i<arrResponses.length; i++) {
+            let questionResponses = questions[currentQuestion].responses;
+
+            arrResponses[i].replaceWith(arrResponses[i].cloneNode(true));
+            audioResponses[i].replaceWith(audioResponses[i].cloneNode(true));
+
+            arrResponses[i].addEventListener("click", function () {
+                checkAnswer(questionResponses[i].responseText);
+            });
+
+            audioResponses[i].addEventListener("click", function () {
+                document.getElementById("ans"+(i+1)+"_audio").play();
+            })
+
+            arrResponses[i].innerHTML = questionResponses[i].responseText;
+            document.getElementById("ans"+(i+1)+"_audio").src= questionResponses[i].audioPath;
+        }
+
+        currentQuestion++;
+    }
+
+    document.getElementById("next").addEventListener("click", function(){
+        nextQuestion();
+        document.getElementById('content1').hidden = true;
+        document.getElementById('content2').hidden = false;
+        document.getElementById('next').hidden = true;
+    });
+
+    document.getElementById("audioIcon").addEventListener("click", function(){
+        document.getElementById('audio_text').play();
+    });
+</script>

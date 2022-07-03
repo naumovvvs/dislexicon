@@ -1,0 +1,51 @@
+<div class="container">
+    <nav class="navbar navbar-expand-lg bg-light row">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <img src="img/ikona.png" alt="App Icon" width="40" height="40" class="d-inline-block align-text-middle">
+                Дислексикон
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav" style="font-size: 14pt; font-weight: bolder;">
+                    <li class="nav-item">
+                        <a class="nav-link" id="/home" aria-current="page" href="/home">Почетна</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="/learnAlphabet" href="/learnAlphabet">Научи ја азбуката</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="/guessTheWord" href="/guessTheWord">Слико-збор</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="/questions" href="/questions">Прашања</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="/riddles" href="/riddles">Загатки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="/math" href="/math">Броеви</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="/help" href="/help">Помош</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script>
+    let url = window.location.href;
+    let array = url.split("8080");
+    let page = array[1];
+
+    if(page === "" || page==="/" || page==="/home") {
+        document.getElementById("/home").classList.add("active");
+    }else {
+        document.getElementById(page).classList.add("active");
+    }
+</script>

@@ -67,7 +67,11 @@
 </div>
 
 <script>
-    let apiURL = "http://localhost:8080/api/riddles";
+    let baseUrl = window.location.href;
+    let apiURL;
+
+    apiURL = baseUrl.split("riddles")[0] + "api/riddles";
+
     let riddles;
     let currentRiddle = 0;
 

@@ -101,7 +101,11 @@
 </style>
 
 <script>
-    let apiURL = "http://localhost:8080/api/questions";
+    let baseUrl = window.location.href;
+    let apiURL;
+
+    apiURL = baseUrl.split("questions")[0] + "api/questions";
+
     let questions;
     let currentQuestion = 0;
 

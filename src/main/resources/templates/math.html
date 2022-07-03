@@ -71,7 +71,11 @@
 </div>
 
 <script>
-    let apiURL = "http://localhost:8080/api/math";
+    let baseUrl = window.location.href;
+    let apiURL;
+
+    apiURL = baseUrl.split("math")[0] + "api/math";
+
     let maths;
     let currentQuestion = 0;
 

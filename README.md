@@ -1,5 +1,5 @@
 <p align="center"> 
-  <img src="/img/ikona.png" align="end" alt="Logo" width="225" height="auto"/>
+  <img src="/src/main/resources/static/img/ikona.png" align="end" alt="Logo" width="225" height="auto"/>
 </p>
 
 # Дислексикон
@@ -37,19 +37,26 @@ ___
     * strasho.naumov@students.finki.ukim.mk
 
 ## Слики од апликацијата
-*Почетна*
-![alt text](img/screenshots/home.png "Почетна")
-*Научи ја азбуката*
-![alt text](img/screenshots/alphabet.png "Научи ја азбуката")
-*Слико-збор*
-![alt text](img/screenshots/pictureWord.png "Слико-збор")
-*Прашања - текст*
-![alt text](img/screenshots/questions.png "Прашања-текст")
-*Прашања - одговори*
-![alt text](img/screenshots/questionsResponses.png "Прашања-одговори")
-*Загатки*
-![alt text](img/screenshots/riddles.png "Загатки")
-*Броеви*
-![alt text](img/screenshots/maths.png "Броеви")
-*Помош*
-![alt text](img/screenshots/help.png "Помош")
+*Почетна* <br>
+![alt text](src/main/resources/static/img/screenshots/home.png "Почетна")
+<br>
+*Научи ја азбуката* <br>
+![alt text](src/main/resources/static/img/screenshots/alphabet.png "Научи ја азбуката") 
+<br>
+*Слико-збор* <br>
+![alt text](src/main/resources/static/img/screenshots/pictureWord.png "Слико-збор")
+<br>
+*Прашања - текст* <br>
+![alt text](src/main/resources/static/img/screenshots/questions.png "Прашања-текст")
+<br>
+*Прашања - одговори* <br>
+![alt text](src/main/resources/static/img/screenshots/questionsResponses.png "Прашања-одговори")
+<br>
+*Загатки* <br>
+![alt text](src/main/resources/static/img/screenshots/riddles.png "Загатки")
+<br>
+*Броеви* <br>
+![alt text](src/main/resources/static/img/screenshots/maths.png "Броеви") 
+<br>
+*Помош* <br>
+![alt text](src/main/resources/static/img/screenshots/help.png "Помош")
